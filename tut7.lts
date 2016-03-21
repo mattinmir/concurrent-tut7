@@ -1,0 +1,28 @@
+
+// 1
+property PS = (a -> (b-> PS | a -> PS) | b -> a -> PS). 
+
+A = (b -> A).
+
+
+// 2
+property CAP = CAP[10],
+CAP[capacity:0..10] = (when(capacity > 0) enter -> CAP[capacity-1]
+				|when (capacity <10) exit -> CAP[capacity-1]).
+
+
+// 3
+CARPARKCONTROL(N=4) = SPACES[N],
+SPACES[i:0..N]= ( when(i>0) arrive->SPACES[i-1]
+				| when(i<N) depart->SPACES[i+1]).
+ARRIVALS = (arrive->ARRIVALS).
+DEPARTURES = (depart->DEPARTURES).
+||CARPARK = (ARRIVALS||CARPARKCONTROL(4)||DEPARTURES).
+
+property  OVERFLOW(N=4) = OVERFLOW[0],
+OVERFLOW[i:0..N] = 	(arrive -> OVERFLOW[i+1]
+					|depart -> OVERFLOW[i-1]).
+
+||CHECK = (CARPARK||OVERFLOW(4)) << {depart}.
+
+progress A = {arrive}
